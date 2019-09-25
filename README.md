@@ -1,2 +1,2 @@
 # ArduinoTec-Pedals
-Fanatec CSPV1 
+This project uses a Arduino Leonardo, Pro Micro or Teensy to replace the controller board of the   Fanatec CSPV1 
