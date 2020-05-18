@@ -64,6 +64,7 @@ void setup() {
 void loop() {
   //reading the relevant values from the pedals
   int valThr = analogRead(Throttle);
+  
   int valBrk = analogRead(Brake);
   int valCth = analogRead(Clutch);
   int valRestBrk = analogRead(BrakeResistance);
@@ -107,11 +108,35 @@ void loop() {
   if (actCthVal  > (maxCth - clutch_U_DZ)  ) {actCthVal  = (maxCth - clutch_U_DZ);}
   if (actThrVal  > (maxThr - throttle_U_DZ)) {actThrVal  = (maxThr - throttle_U_DZ);}
   if (PersBrkVal > (maxBrk - brake_U_DZ)   ) {PersBrkVal = (maxBrk - brake_U_DZ);}
-
-  //set the values applying deadzone
-  if ( (actCthVal  > (blCth + clutch_L_DZ))   || (actCthVal  < (blCth + clutch_L_DZ))  ) Joystick.setRxAxis(actCthVal);
-  if ( (actThrVal  > (blThr + throttle_L_DZ)) || (actThrVal  < (blThr + throttle_L_DZ))) Joystick.setThrottle(actThrVal);
-  if ( (PersBrkVal > (blBrk + brake_L_DZ ))   || (PersBrkVal < (blBrk + brake_L_DZ))   ) Joystick.setBrake(PersBrkVal);
+ 
+  //set the values applying base deadzone
+  if (valCth >0) 
+  {
+    if (actCthVal > clutch_L_DZ) Joystick.setRxAxis(actCthVal);
+    else Joystick.setRxAxis(0);
+  }
+  if (valThr >0) 
+  {
+    if (actThrVal > throttle_L_DZ) Joystick.setThrottle(actThrVal);
+    else Joystick.setThrottle(0);
+  }
+  if (valBrk >0) 
+  {
+    if (actBrkVal > brake_L_DZ) Joystick.setBrake(PersBrkVal);
+    else Joystick.setBrake(0);
+  }
+  
+  
+ /* 
+  actBrkVal
+  //(actCthVal  > (blCth + clutch_L_DZ)  
+  //else if (actCthVal  < (blCth - clutch_L_DZ))  
+  if ( (actThrVal  > (blThr + throttle_L_DZ)) || (actThrVal  < (blThr - throttle_L_DZ))) Joystick.setThrottle(actThrVal);
+  if ( (PersBrkVal > (blBrk + brake_L_DZ ))   || (PersBrkVal < (blBrk - brake_L_DZ))   ) Joystick.setBrake(PersBrkVal);
+ */
+ 
+ 
+//original  value settings  
  /* 
   Joystick.setRxAxis(actCthVal);
   Joystick.setThrottle(actThrVal);
