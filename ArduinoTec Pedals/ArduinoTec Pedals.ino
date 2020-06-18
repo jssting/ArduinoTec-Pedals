@@ -118,12 +118,10 @@ void loop() {
        delay(100);}
     
     if(dbg_PrintCTH){
-    //  blCth = get_baseline(Clutch, 25);
       String values = "Clutch - Baseline: " + String(blCth) + ", Actual Value: " + String(valCth) + ", Normalised Value: " + String(actCthVal) + ", Max Value: " + String(maxCth);                      
       Serial.println(values);
       delay(100);}  
-    Serial.println("");//create an empty line
-    //delay(250);
+    Serial.println("");//create an empty line   
   }
 
   if (actBrkVal > (maxBrk * 0.80)) digitalWrite(VibrationMotor, LOW); //enable the motor to spin when the pedal reaches 80% of the pedal pressure
@@ -150,23 +148,6 @@ void loop() {
     if (actBrkVal > brake_L_DZ) Joystick.setBrake(PersBrkVal);
     else Joystick.setBrake(0);
   }
-  
-  
- /* 
-  actBrkVal
-  //(actCthVal  > (blCth + clutch_L_DZ)  
-  //else if (actCthVal  < (blCth - clutch_L_DZ))  
-  if ( (actThrVal  > (blThr + throttle_L_DZ)) || (actThrVal  < (blThr - throttle_L_DZ))) Joystick.setThrottle(actThrVal);
-  if ( (PersBrkVal > (blBrk + brake_L_DZ ))   || (PersBrkVal < (blBrk - brake_L_DZ))   ) Joystick.setBrake(PersBrkVal);
- */
- 
- 
-//original  value settings  
- /* 
-  Joystick.setRxAxis(actCthVal);
-  Joystick.setThrottle(actThrVal);
-  Joystick.setBrake(PersBrkVal);
-  */
 }
 
 int get_baseline(int pin, int count) { //get the pedal baseline
