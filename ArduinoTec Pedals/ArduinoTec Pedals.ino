@@ -3,6 +3,11 @@
 #define Throttle          A0
 #define Brake             A1
 #define Clutch            A2
+
+#define Throttle_I2       A5 //second input line (brown wire)
+#define Brake_I2          A6 //second input line (brown wire)
+#define Clutch_I2         A8 //second input line (brown wire)
+
 #define BrakeResistance   A3
 #define VibrationMotor    3
 
@@ -50,6 +55,12 @@ void setup() {
   pinMode(Throttle, INPUT); //Throttle  
   pinMode(Brake, INPUT); //Brake
   pinMode(Clutch, INPUT); //Clutch
+  
+  //Setting optional pins states
+  if (use_Dual_Thr) pinMode(Throttle_I2, INPUT); //Throttle input 2
+  if (use_Dual_Cl) pinMode(Clutch_I2, INPUT); //Clutch input 2
+  if (use_Dual_Brk) pinMode(Brake_I2, INPUT); //Brake input 2
+  
   pinMode(BrakeResistance, INPUT); //BrakeResistance;
   pinMode(VibrationMotor, OUTPUT); // Vibration Motor Control this is paired with a transistor to control the motor
   pinMode(13, OUTPUT); // LED output
@@ -63,10 +74,24 @@ void setup() {
 
 void loop() {
   //reading the relevant values from the pedals
-  int valThr = analogRead(Throttle);
+  int valThr = 0;
+  int valBrk = 0;
+  int valCth = 0;
   
+  if (use_Dual_Thr) valThr = abs((analogRead(Throttle)+analogRead(Throttle_I2))/2);
+  else valThr = analogRead(Throttle);
+  
+  if (use_Dual_Cl) valCth = abs((analogRead(Clutch)+analogRead(Clutch_I2))/2);
+  else valCth = analogRead(Clutch);
+  
+  if (use_Dual_Brk) valBrk = abs((analogRead(Brake)+analogRead(Brake_I2))/2);
+  else valBrk = analogRead(Brake);
+  
+  /* Original read statements
+  int valThr = analogRead(Throttle);
   int valBrk = analogRead(Brake);
-  int valCth = analogRead(Clutch);
+  int valCth = analogRead(Clutch); */
+  
   int valRestBrk = analogRead(BrakeResistance);
   double pers = get_Persentage(BrakeResistance); //get the resistance persentage to apply against the brake pedal which then halved
 
